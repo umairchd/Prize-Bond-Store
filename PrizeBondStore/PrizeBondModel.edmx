@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PrizeBondModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Denomination">
+          <Key>
+            <PropertyRef Name="DenominationId" />
+          </Key>
+          <Property Name="DenominationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrizeBond">
+          <Key>
+            <PropertyRef Name="PrizeBondCode" />
+          </Key>
+          <Property Name="PrizeBondCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DenominationId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PrizeBond_Denomination">
+          <End Role="Denomination" Type="Self.Denomination" Multiplicity="1" />
+          <End Role="PrizeBond" Type="Self.PrizeBond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Denomination">
+              <PropertyRef Name="DenominationId" />
+            </Principal>
+            <Dependent Role="PrizeBond">
+              <PropertyRef Name="DenominationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PrizeBondModelStoreContainer">
+          <EntitySet Name="Denomination" EntityType="Self.Denomination" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrizeBond" EntityType="Self.PrizeBond" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PrizeBond_Denomination" Association="Self.FK_PrizeBond_Denomination">
+            <End Role="Denomination" EntitySet="Denomination" />
+            <End Role="PrizeBond" EntitySet="PrizeBond" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PrizeBondModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PrizeBondEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Denominations" EntityType="PrizeBondModel.Denomination" />
+          <EntitySet Name="PrizeBonds" EntityType="PrizeBondModel.PrizeBond" />
+          <AssociationSet Name="FK_PrizeBond_Denomination" Association="PrizeBondModel.FK_PrizeBond_Denomination">
+            <End Role="Denomination" EntitySet="Denominations" />
+            <End Role="PrizeBond" EntitySet="PrizeBonds" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Denomination">
+          <Key>
+            <PropertyRef Name="DenominationId" />
+          </Key>
+          <Property Name="DenominationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PrizeBonds" Relationship="PrizeBondModel.FK_PrizeBond_Denomination" FromRole="Denomination" ToRole="PrizeBond" />
+        </EntityType>
+        <EntityType Name="PrizeBond">
+          <Key>
+            <PropertyRef Name="PrizeBondCode" />
+          </Key>
+          <Property Name="PrizeBondCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DenominationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Denomination" Relationship="PrizeBondModel.FK_PrizeBond_Denomination" FromRole="PrizeBond" ToRole="Denomination" />
+        </EntityType>
+        <Association Name="FK_PrizeBond_Denomination">
+          <End Type="PrizeBondModel.Denomination" Role="Denomination" Multiplicity="1" />
+          <End Type="PrizeBondModel.PrizeBond" Role="PrizeBond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Denomination">
+              <PropertyRef Name="DenominationId" />
+            </Principal>
+            <Dependent Role="PrizeBond">
+              <PropertyRef Name="DenominationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PrizeBondModelStoreContainer" CdmEntityContainer="PrizeBondEntities" >
+          <EntitySetMapping Name="Denominations">
+            <EntityTypeMapping TypeName="PrizeBondModel.Denomination">
+              <MappingFragment StoreEntitySet="Denomination">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DenominationId" ColumnName="DenominationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrizeBonds">
+            <EntityTypeMapping TypeName="PrizeBondModel.PrizeBond">
+              <MappingFragment StoreEntitySet="PrizeBond">
+                <ScalarProperty Name="DenominationId" ColumnName="DenominationId" />
+                <ScalarProperty Name="PrizeBondCode" ColumnName="PrizeBondCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
